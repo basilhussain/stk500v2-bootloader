@@ -3,7 +3,7 @@
 # Author: Peter Fleury
 # File:   $Id: Makefile,v 1.7 2015/08/15 09:10:38 peter Exp $
 #
-# Adjust MCU, F_CPU and BOOTLOADER_ADDRESS below to your AVR target 
+# Adjust MCU, F_CPU and BOOTLOADER_ADDRESS below to your AVR target
 #----------------------------------------------------------------------------
 # usage:
 #
@@ -13,22 +13,22 @@
 #                 Please customize the avrdude settings below first!
 #
 # make filename.s = Just compile filename.c into the assembler code only.
-# make filename.i = Create a preprocessed source file 
+# make filename.i = Create a preprocessed source file
 #
 # To rebuild project do "make clean" then "make"
 #----------------------------------------------------------------------------
 
 
 # MCU name
-MCU = atmega8
+MCU ?= atmega8
 
 
 # Processor frequency.
-#     This will define a symbol, F_CPU, in all source code files equal to the 
-#     processor frequency. You can then use this symbol in your source code to 
+#     This will define a symbol, F_CPU, in all source code files equal to the
+#     processor frequency. You can then use this symbol in your source code to
 #     calculate timings. Do NOT tack on a 'UL' at the end, this will be done
 #     automatically to create a 32-bit value in your source code.
-F_CPU = 7372800
+F_CPU ?= 7372800
 
 
 # Target file name (without extension).
@@ -40,7 +40,7 @@ TARGET = stk500boot
 # BOOTLOADER_ADDRESS =  2 * ( (AVR-Flash size in words) - (boot-size in words) )
 # e.g. for ATmega8 and 512 words boot size:  2 * ( 4096 - 512 )   or  2 * ( 0x1000 - 0x200 ) = 0x1C00
 #      for ATmega32 and 512 words boot size: 2 * ( 16384 - 512 )  or  2 * ( 0x4000 - 0x200 ) = 0x7C00
-BOOTLOADER_ADDRESS = 0x1C00
+BOOTLOADER_ADDRESS ?= 0x1C00
 
 
 # List C source files here. (C dependencies are automatically generated.)
@@ -68,7 +68,7 @@ EXTRAINCDIRS =
 #     (unlike VPATH= which is a search path for all prerequisites, not just source files)
 
 
-# Optimization level, can be [0, 1, 2, 3, s]. 
+# Optimization level, can be [0, 1, 2, 3, s].
 #     0 = turn off optimization. s = optimize for size.
 #     (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
 OPT = s
@@ -99,7 +99,7 @@ CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -Wall -Wstrict-prototypes
 CFLAGS += -Wa,-adhlns=$(<:.c=.lst)
 CFLAGS += -save-temps
-CFLAGS += -fno-move-loop-invariants -fno-tree-scev-cprop -fno-inline-small-functions -fno-jump-tables 
+CFLAGS += -fno-move-loop-invariants -fno-tree-scev-cprop -fno-inline-small-functions -fno-jump-tables
 
 
 #---------------- Assembler Options ----------------
@@ -116,7 +116,7 @@ PRINTF_LIB_MIN = -Wl,-u,vfprintf -lprintf_min
 PRINTF_LIB_FLOAT = -Wl,-u,vfprintf -lprintf_flt
 
 # If this is left blank, then it will use the Standard printf version.
-PRINTF_LIB = 
+PRINTF_LIB =
 #PRINTF_LIB = $(PRINTF_LIB_MIN)
 #PRINTF_LIB = $(PRINTF_LIB_FLOAT)
 
@@ -128,7 +128,7 @@ SCANF_LIB_MIN = -Wl,-u,vfscanf -lscanf_min
 SCANF_LIB_FLOAT = -Wl,-u,vfscanf -lscanf_flt
 
 # If this is left blank, then it will use the Standard scanf version.
-SCANF_LIB = 
+SCANF_LIB =
 #SCANF_LIB = $(SCANF_LIB_MIN)
 #SCANF_LIB = $(SCANF_LIB_FLOAT)
 
@@ -163,7 +163,8 @@ LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 #--------------- bootloader linker Options -------
 # BOOTLOADER_ADDRESS (=Start of Boot Loader section
 # in bytes - not words) is defined above.
-LDFLAGS += -Wl,--section-start=.text=$(BOOTLOADER_ADDRESS) -nostartfiles -nodefaultlibs
+LDFLAGS += -Wl,--section-start=.text=$(BOOTLOADER_ADDRESS) -nostartfiles
+# LDFLAGS += -Wl,--section-start=.text=$(BOOTLOADER_ADDRESS) -nostartfiles -nodefaultlibs
 
 
 #---------------- Programming Options (avrdude) ----------------
@@ -171,7 +172,7 @@ LDFLAGS += -Wl,--section-start=.text=$(BOOTLOADER_ADDRESS) -nostartfiles -nodefa
 # Programming hardware:   Type: avrdude -c ? to get a full listing.
 AVRDUDE_PROGRAMMER = usbasp
 
-# usb, com1 = serial port, lpt1 = parallel port 
+# usb, com1 = serial port, lpt1 = parallel port
 AVRDUDE_PORT = USB
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
@@ -187,7 +188,7 @@ AVRDUDE_NO_SAFEMODE = -u
 # Note that this counter needs to be initialized first using -Yn,
 #AVRDUDE_ERASE_COUNTER = -y
 
-# Increase verbosity level.  
+# Increase verbosity level.
 #AVRDUDE_VERBOSE = -v -v
 
 # Adjust programming speed of USBasp
@@ -199,11 +200,11 @@ AVRDUDE_NO_SAFEMODE = -u
 #  -B 125 			8 khz
 #  -B 62 			  16khz
 #  -B 31 				32khz * the cutoff for bit banged isp
-#  -B 10 				93.75 khz 
+#  -B 10 				93.75 khz
 #  -B 5 			  187.5 khz
 #  -B 2 				375 khz
 #  -B 1 				750 khz
-#  -B .5 			  1.5mhz 
+#  -B .5 			  1.5mhz
 AVRDUDE_SPEED = -B .5
 
 AVRDUDE_FLAGS = -p $(MCU) -P $(AVRDUDE_PORT) -c $(AVRDUDE_PROGRAMMER)
@@ -248,7 +249,7 @@ MSG_CLEANING = Cleaning project:
 OBJ = $(SRC:.c=.o) $(ASRC:.S=.o)
 
 # Define all listing files.
-LST = $(SRC:.c=.lst) $(ASRC:.S=.lst) 
+LST = $(SRC:.c=.lst) $(ASRC:.S=.lst)
 
 
 # Compiler flags to generate dependency files.
@@ -266,7 +267,7 @@ all: gccversion $(TARGET).elf $(TARGET).hex $(TARGET).eep $(TARGET).lss $(TARGET
 
 
 # Display compiler version information.
-gccversion : 
+gccversion :
 	@echo $(OBJ1)
 	@$(CC) --version
 
@@ -278,7 +279,7 @@ gccversion :
 
 %.eep: %.elf
 	@echo $(MSG_EEPROM) $@
-	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $(FORMAT) $< $@ 
+	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $(FORMAT) $< $@
 
 # Create extended listing file from ELF output file.
 %.lss: %.elf
@@ -295,7 +296,7 @@ gccversion :
 .PRECIOUS : $(OBJ)
 %.elf: $(OBJ)
 	@echo $(MSG_LINKING) $@
-	$(CC) -mmcu=$(MCU) $(LDFLAGS) $^ --output $(@F) 
+	$(CC) -mmcu=$(MCU) $(LDFLAGS) $^ --output $(@F)
 
 # Compile: create object files from C source files.
 %.o : %.c
@@ -313,7 +314,7 @@ gccversion :
 
 # Create preprocessed source for use in sending a bug report.
 %.i : %.c
-	$(CC) -E -mmcu=$(MCU) -I. $(CFLAGS) $< -o $(@F) 
+	$(CC) -E -mmcu=$(MCU) -I. $(CFLAGS) $< -o $(@F)
 
 
 # Display size of file.
@@ -321,7 +322,7 @@ size: ${TARGET}.elf
 	@avr-size -C --mcu=${MCU} ${TARGET}.elf
 
 
-# Program the device.  
+# Program the device.
 program: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
@@ -333,7 +334,7 @@ clean:
 
 
 # Include the dependency files.
-#-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*) 
+#-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 -include $(shell mkdir .dep 2>NUL) $(wildcard .dep/*)
 
 
