@@ -1,4 +1,4 @@
-# STK500v2-compatible Bootloader for ATmega##M1
+# STK500v2-compatible Bootloader for ATmegaXXM1
 
 This is a fork of Peter Fleury's STK500v2 bootloader for Atmel AVR microcontrollers. It features modifications to allow it to be used on the ATmega16M1, ATmega32M1 and ATmega64M1 microcontrollers.
 
